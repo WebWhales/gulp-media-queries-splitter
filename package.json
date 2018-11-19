@@ -1,0 +1,31 @@
+{
+  "name": "gulp-media-queries-splitter",
+  "version": "1.0.0",
+  "description": "Package to split CSS files based on media query rules",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WebWhales/gulp-media-queries-splitter.git"
+  },
+  "keywords": [
+    "gulp",
+    "css",
+    "media",
+    "queries"
+  ],
+  "dependencies": {
+    "css-parse": "^2.0.0",
+    "css-stringify": "^2.0.0",
+    "gulp": "^3.9.1",
+    "plugin-error": "^1.0.1"
+  },
+  "author": "Web Whales",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WebWhales/gulp-media-queries-splitter/issues"
+  },
+  "homepage": "https://github.com/WebWhales/gulp-media-queries-splitter#readme"
+}
