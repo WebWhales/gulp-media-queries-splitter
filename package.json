@@ -1,6 +1,6 @@
 {
   "name": "gulp-media-queries-splitter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Package to split CSS files based on media query rules",
   "main": "index.js",
   "scripts": {

@@ -72,7 +72,7 @@ const mediaQueriesSplitter = {
                         option.media = [option.media];
                     }
 
-                    option.media.forEach((optionMedia) => {
+                    option.media.every((optionMedia) => {
                         let outputFile = '',
                             isMediaWidthRule = false,
                             ruleMediaMin = null,
@@ -84,6 +84,9 @@ const mediaQueriesSplitter = {
 
                             if ((ruleMediaMin && ruleMediaMin[1]) || (ruleMediaMax && ruleMediaMax[1])) {
                                 isMediaWidthRule = true;
+
+                                ruleMediaMin = ruleMediaMin ? ruleMediaMin[1] : 0;
+                                ruleMediaMax = ruleMediaMax ? ruleMediaMax[1] : 0;
                             }
                         }
 
@@ -96,19 +99,17 @@ const mediaQueriesSplitter = {
                                 optionMediaMinUntil = optionMedia.minUntil ? parseInt(optionMedia.minUntil, 10) : 0,
                                 optionMediaMax = optionMedia.max ? parseInt(optionMedia.max, 10) : 0;
 
+                            if (!optionMediaMinUntil && optionMediaMax) {
+                                optionMediaMinUntil = optionMediaMax;
+                            }
+
                             try {
-                                if (optionMediaMin && optionMediaMax) {
-                                    if (ruleMediaMin[1] && ruleMediaMin[1] >= optionMediaMin && (!optionMediaMinUntil || ruleMediaMin[1] < optionMediaMinUntil) && ruleMediaMax[1] && ruleMediaMax[1] < optionMediaMax) {
-                                        outputFile = option.filename;
-                                    }
-                                } else if (optionMediaMin && !ruleMediaMax) {
-                                    if (ruleMediaMin[1] && ruleMediaMin[1] >= optionMediaMin && (!optionMediaMinUntil || ruleMediaMin[1] < optionMediaMinUntil)) {
-                                        outputFile = option.filename;
-                                    }
-                                } else if (optionMediaMax && !ruleMediaMin) {
-                                    if (ruleMediaMax[1] && ruleMediaMax[1] < optionMediaMax) {
-                                        outputFile = option.filename;
-                                    }
+                                let ruleMeetsOptionMediaMin = optionMediaMin ? ruleMediaMin && ruleMediaMin >= optionMediaMin : true,
+                                    ruleMeetsOptionMediaMinUntil = optionMediaMinUntil && ruleMediaMin ? ruleMediaMin < optionMediaMinUntil : true,
+                                    ruleMeetsOptionMediaMax = optionMediaMax && ruleMediaMax ? ruleMediaMax < optionMediaMax : true;
+
+                                if (ruleMeetsOptionMediaMin && ruleMeetsOptionMediaMinUntil && ruleMeetsOptionMediaMax) {
+                                    outputFile = option.filename;
                                 }
                             } catch (error) {
                             }
@@ -120,7 +121,12 @@ const mediaQueriesSplitter = {
                             }
 
                             outputFiles[outputFile].push(rule);
+
+                            //Return false to break the loop, to prevent the current rule to be added to the same file multiple times
+                            return false;
                         }
+
+                        return true;
                     });
                 });
             });
